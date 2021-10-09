@@ -1,32 +1,55 @@
 import json
+import os
 from imagededup.methods import PHash
-from imagededup.utils import plot_duplicates
-from json import *
+from progressbar import printProgressBar
+
+def parseJsonFile(jsonFile):
+  f = open(jsonFile)
+  data = json.load(f)
+  f.close()
+  return data
 
 
-def writeIntoFile(str):
-  file = open(r'output/main.json','w')
-  file.write(str)
-  file.close()
+def findTwins(allImagesDir, similarImagesDir):
 
-def findTwins():
+  print('All images in {}, Duplicates in {}'.format(allImagesDir, similarImagesDir))
+
   phasher = PHash()
 
-  # Generate encodings for all images in an image directory
-  encodings = phasher.encode_images(image_dir='E:/images/iw233/2021-10-07/images')
-
-  # Find duplicates using the generated encodings
+  encodings = phasher.encode_images(image_dir=allImagesDir)
   duplicates = phasher.find_duplicates(encoding_map=encodings)
 
   return duplicates
 
-  # # plot duplicates obtained for a given file using the duplicates dictionary
-  # plot_duplicates(image_dir='path/to/image/directory',
-  #                 duplicate_map=duplicates,
-  #                 filename='ukbench00120.jpg')
   
+def moveDuplicates(allImagesDir, similarImagesDir, duplicates):
+  if not os.path.exists(similarImagesDir):
+    os.makedirs(similarImagesDir)
+
+  allBaseFileNames = os.listdir(allImagesDir)
+
+  l = len(allBaseFileNames)
+  printProgressBar(0, l, prefix = 'Move duplicate files:', suffix = 'Complete', length = 50)
+
+  for idx, baseFileName in enumerate(allBaseFileNames):
+    similarFileNameList = duplicates[baseFileName]
+    if len(similarFileNameList) != 0:
+      os.replace("{}/{}".format(allImagesDir, baseFileName), "{}/{}".format(similarImagesDir, baseFileName))
+      for similarFileName in similarFileNameList:
+        basename, _ = os.path.splitext(baseFileName)
+        similarname, extension = os.path.splitext(similarFileName)
+        similarFileNewName = "{}_{}{}".format(basename, similarname, extension)
+        os.replace("{}/{}".format(allImagesDir, similarFileName), "{}/{}".format(similarImagesDir, similarFileNewName))
+        duplicates[similarFileName] = []
   
-if __name__ == "__main__":
-  duplicates = findTwins()
-  writeIntoFile(json.dumps(duplicates)) 
+    printProgressBar(idx + 1, l, prefix = 'Move duplicate files:', suffix = 'Complete', length = 50)
+
+
+if __name__ == '__main__':
+  config = parseJsonFile('config.json')
+  allImagesDir=config["all_images_dir"]
+  similarImagesDir=config['duplicate_images_dir']
+
+  duplicates = findTwins(allImagesDir, similarImagesDir)
+  moveDuplicates(allImagesDir, similarImagesDir, duplicates)
   

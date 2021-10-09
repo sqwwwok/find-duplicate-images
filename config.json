@@ -1,6 +1,4 @@
 {
-  "all_images_dir": "",
-  "sample_images_dir": "",
-  "duplicate_data_json": "",
-  "duplicate_images_dir": ""
+  "all_images_dir": "demo/assets",
+  "duplicate_images_dir": "demo/duplicates"
 }

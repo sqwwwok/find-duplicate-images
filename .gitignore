@@ -1,3 +1,6 @@
+.vscode
+
 duplicates
-output
 demo
+
+**/__pycache__
