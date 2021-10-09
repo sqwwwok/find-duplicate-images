@@ -14,6 +14,9 @@ def findTwins(allImagesDir, findMethod):
   encodings = phasher.encode_images(image_dir=allImagesDir)
   duplicates = phasher.find_duplicates(encoding_map=encodings)
 
+  # with open('mock.json', 'a') as out:
+  #   out.write(json.dumps(duplicates))
+
   return duplicates
 
   
@@ -37,10 +40,16 @@ def moveDuplicates(allImagesDir, similarImagesDir, duplicates, symbol=''):
           similarFileNewName = "{}({}){}{}".format(basename, index+1, symbol, extension)
         else:
           similarFileNewName = similarFileName
+        
+        # in some cases, file will be similar with different images, which will casuse moving twice
+        # "17958.jpg": ["5380.jpg"],
+        # "31283.jpg": ["5380.jpg"],
+        # "5380.jpg": ["17958.jpg", "31283.jpg"],
         try:
          os.replace(join(allImagesDir, similarFileName), join(similarImagesDir, similarFileNewName))
         except:
           pass
+
         duplicates[similarFileName] = []
   
     printProgressBar(i + 1, l, prefix = 'Move duplicate files:', suffix = 'Complete', length = 50)
