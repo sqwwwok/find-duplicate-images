@@ -1,4 +1,11 @@
 {
-  "all_images_dir": "demo/assets",
-  "duplicate_images_dir": "demo/duplicates"
+  "find": ["PHash", "CNN"],
+  "pick": {
+    "best": {
+      "reference": "size",
+      "biggest": true
+    },
+    "duplicate_symbol": "$"
+  },
+  "auto_remove": false
 }

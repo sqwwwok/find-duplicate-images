@@ -31,14 +31,22 @@ Python 3.6+
 ```shell
 pip install imagededup
 
-# add path 
-vi config.json
-# {
-#   "all_images_dir": "demo",
-#   "duplicate_images_dir": "twins"
-# }
+python src/main.py /all/images/dir /duplicate/images/dir 
+```
 
-python src/main.py
+## Config
+```json
+{
+  "find": ["PHash", "CNN"],
+  "pick": {
+    "best": {
+      "reference": "size",
+      "biggest": true
+    },
+    "duplicate_symbol": "$"
+  },
+  "auto_remove": false
+}
 ```
 
 ## Reference
