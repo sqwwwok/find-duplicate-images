@@ -34,18 +34,29 @@ pip install imagededup
 python src/main.py /all/images/dir /duplicate/images/dir 
 ```
 
-## Config
-```json
+## Configuration
+```js
 {
+  // find duplicate images in specific order
+  // 'PHash' | 'CNN'
   "find": ["PHash", "CNN"],
   "pick": {
+    // pick images you want to remain
     "best": {
-      "reference": "size",
+      // 'size' | 'date' | 'name'
+      "indicator": "size",
       "biggest": true
     },
-    "duplicate_symbol": "$"
-  },
-  "auto_remove": false
+    // rename duplicate images
+    // {base_img_name}({symbol}{index}){original_name}{extension}
+    // e.g. bar.jpg -> foo($1)bar.jpg
+    "secondary": {
+      "symbol": "$",
+      "with_ori_name": false
+    },
+    // auto remove duplicate images
+    "auto_remove_secondary": false
+  }
 }
 ```
 

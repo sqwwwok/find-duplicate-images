@@ -1,3 +1,8 @@
+import os
+
+def join(*arguments):
+  return os.path.join(*locals()["arguments"]).replace('\\', '/')
+
 # Print iterations progress
 def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
     """

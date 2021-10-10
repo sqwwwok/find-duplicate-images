@@ -2,10 +2,13 @@
   "find": ["PHash", "CNN"],
   "pick": {
     "best": {
-      "reference": "size",
+      "indicator": "size",
       "biggest": true
     },
-    "duplicate_symbol": "$"
-  },
-  "auto_remove": false
+    "secondary": {
+      "symbol": "$",
+      "with_ori_name": false
+    },
+    "auto_remove_secondary": false
+  }
 }
